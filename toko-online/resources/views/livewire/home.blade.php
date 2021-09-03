@@ -8,7 +8,7 @@
     @endif
     @endif
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-md-6">
             <div class="input-group mb-3">
                 <input type="text" wire:model="search" id="" class="form-control" placeholder="search..." />

@@ -14,4 +14,9 @@ class Shopping extends Model
         'total_harga',
         'status'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

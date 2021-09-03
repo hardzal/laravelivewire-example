@@ -26,6 +26,8 @@ class Home extends Component
             'total_harga' => $product->price,
             'status' => 0
         ]);
+
+        return redirect()->route('shopping');
     }
 
     public function render()

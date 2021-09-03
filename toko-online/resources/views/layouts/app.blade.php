@@ -52,7 +52,7 @@
                         @if(Auth::user())
                         @if(Auth::user()->role_id == 0)
                         <li class="nav-item">
-                            <a href="{{ url('shoppinguser') }}" class="nav-link">{{ 'Check out' }}</a>
+                            <a href="{{ url('shopping') }}" class="nav-link">{{ 'Check out' }}</a>
                         </li>
                         @endif
                         @endif
