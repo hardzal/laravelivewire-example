@@ -1,0 +1,5 @@
+- install laravel & jetstream
+- publish component jetstream
+  - php artisan vendor:publish --tag=jetstream-views
+- install laravel/trix (wysiwyg)
+- 
