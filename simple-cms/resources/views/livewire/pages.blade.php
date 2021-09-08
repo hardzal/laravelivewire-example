@@ -4,6 +4,51 @@
             {{ __('Create') }}
         </x-jet-button>
     </div>
+
+    {{-- The data table --}}
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead>
+            <tr>
+                <th
+                    class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Title</th>
+                <th
+                    class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Slug</th>
+                <th
+                    class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Content</th>
+                <th
+                    class="px-6 py-6 bg-gray-50 text-xs text-left leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Actions</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            @if($data->count())
+            @foreach($data as $item)
+            <tr>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->title }}</td>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->slug }}</td>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap">{!! $item->content !!}</td>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap">
+                    <x-jet-button wire:click="updateShowModal({{ $item->id }})">
+                        {{ __('Update') }}
+                    </x-jet-button>
+                    <x-jet-danger-button wire:click="deleteShowModal">
+                        {{ __('Delete') }}
+                    </x-jet-danger-button>
+                </td>
+            </tr>
+            @endforeach
+            @else
+            <tr>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap" colspan="4">There is no data</td>
+            </tr>
+            @endif
+        </tbody>
+    </table>
+
+    {{ $data->links() }}
     {{-- Modal Form --}}
     <x-jet-dialog-modal wire:model="modalFormVisible">
         <x-slot name="title">
@@ -51,9 +96,15 @@
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
+            @if($modalId)
+            <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
+                {{ __('Update') }}
+            </x-jet-button>
+            @else
+            <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
                 {{ __('Submit') }}
-            </x-jet-danger-button>
+            </x-jet-button>
+            @endif
         </x-slot>
     </x-jet-dialog-modal>
 </div>

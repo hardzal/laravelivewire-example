@@ -5,11 +5,14 @@ namespace App\Http\Livewire;
 use App\Models\Page;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
-
+use Livewire\WithPagination;
 
 class Pages extends Component
 {
+    use WithPagination;
+
     public $modalFormVisible = false;
+    public $modalId;
     public $title;
     public $slug;
     public $content;
@@ -41,6 +44,19 @@ class Pages extends Component
         $this->resetForm();
     }
 
+    public function read()
+    {
+        return Page::paginate(5);
+    }
+
+    public function update()
+    {
+        $this->validate();
+        Page::find($this->modalId)->update($this->modalData());
+        $this->modalFormVisible = false;
+        $this->resetForm();
+    }
+
     /**
      * createShowModal
      * show the form modal of the create function
@@ -48,9 +64,27 @@ class Pages extends Component
      */
     public function createShowModal()
     {
+        $this->resetValidation();
+        $this->resetForm();
         $this->modalFormVisible = true;
     }
 
+    public function updateShowModal($id)
+    {
+        $this->resetValidation();
+        $this->resetForm();
+        $this->modalId = $id;
+        $this->modalFormVisible = true;
+        $this->loadModel();
+    }
+
+    public function loadModel()
+    {
+        $data = Page::find($this->modalId);
+        $this->title = $data->title;
+        $this->slug = $data->slug;
+        $this->content = $data->content;
+    }
 
     /**
      * modalData
@@ -68,6 +102,7 @@ class Pages extends Component
 
     public function resetForm()
     {
+        $this->modalId = null;
         $this->title = null;
         $this->slug = null;
         $this->content = null;
@@ -86,6 +121,8 @@ class Pages extends Component
      */
     public function render()
     {
-        return view('livewire.pages');
+        return view('livewire.pages', [
+            'data' => $this->read()
+        ]);
     }
 }
