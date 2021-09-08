@@ -28,13 +28,18 @@
             @foreach($data as $item)
             <tr>
                 <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->title }}</td>
-                <td class="px-6 py-4 text-sm whitespace-no-wrap">{{ $item->slug }}</td>
+                <td class="px-6 py-4 text-sm whitespace-no-wrap">
+                    <a class="text-indigo-600 hover:text-indigo-900" target="_blank"
+                        href="{{ URL::to('/'. $item->slug) }}">
+                        {{ $item->slug }}
+                    </a>
+                </td>
                 <td class="px-6 py-4 text-sm whitespace-no-wrap">{!! $item->content !!}</td>
                 <td class="px-6 py-4 text-sm whitespace-no-wrap">
                     <x-jet-button wire:click="updateShowModal({{ $item->id }})">
                         {{ __('Update') }}
                     </x-jet-button>
-                    <x-jet-danger-button wire:click="deleteShowModal">
+                    <x-jet-danger-button wire:click="deleteShowModal({{ $item->id }})">
                         {{ __('Delete') }}
                     </x-jet-danger-button>
                 </td>
@@ -49,6 +54,7 @@
     </table>
 
     {{ $data->links() }}
+
     {{-- Modal Form --}}
     <x-jet-dialog-modal wire:model="modalFormVisible">
         <x-slot name="title">
@@ -105,6 +111,27 @@
                 {{ __('Submit') }}
             </x-jet-button>
             @endif
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    {{-- The Delete Modal --}}
+    <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
+        <x-slot name="title">
+            {{ __('Delete Account') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Are you sure you want to delete your page? Once your page is deleted, all of its resources and data will be permanently deleted. ') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('modalConfirmDeleteVisible')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-danger-button class="ml-2" wire:click="delete" wire:loading.attr="disabled">
+                {{ __('Delete Account') }}
+            </x-jet-danger-button>
         </x-slot>
     </x-jet-dialog-modal>
 </div>

@@ -12,6 +12,7 @@ class Pages extends Component
     use WithPagination;
 
     public $modalFormVisible = false;
+    public $modalConfirmDeleteVisible = false;
     public $modalId;
     public $title;
     public $slug;
@@ -21,7 +22,7 @@ class Pages extends Component
     {
         return [
             'title' => 'required',
-            'slug' => ['required', Rule::unique('pages', 'slug')],
+            'slug' => ['required', Rule::unique('pages', 'slug')->ignore($this->modalId)],
             'content' => 'required'
         ];
     }
@@ -78,6 +79,19 @@ class Pages extends Component
         $this->loadModel();
     }
 
+    public function deleteShowModal($id)
+    {
+        $this->modalId = $id;
+        $this->modalConfirmDeleteVisible = true;
+    }
+
+    public function delete()
+    {
+        Page::destroy($this->modalId);
+        $this->modalConfirmDeleteVisible = false;
+        $this->resetPage();
+    }
+
     public function loadModel()
     {
         $data = Page::find($this->modalId);
@@ -112,6 +126,11 @@ class Pages extends Component
     {
         $result = strtolower(str_replace(' ', '-', $value));
         $this->slug = $result;
+    }
+
+    public function mount()
+    {
+        $this->resetPage();
     }
 
     /**
