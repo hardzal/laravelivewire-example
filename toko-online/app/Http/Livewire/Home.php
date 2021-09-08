@@ -27,7 +27,7 @@ class Home extends Component
             'status' => 0
         ]);
 
-        return redirect()->route('shopping');
+        return redirect()->to('shopping');
     }
 
     public function render()
